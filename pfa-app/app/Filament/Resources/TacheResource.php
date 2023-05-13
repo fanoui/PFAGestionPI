@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProblemeResource\Pages;
-use App\Filament\Resources\ProblemeResource\RelationManagers;
-use App\Models\Materiale;
+use App\Filament\Resources\TacheResource\Pages;
+use App\Filament\Resources\TacheResource\RelationManagers;
 use App\Models\Probleme;
+use App\Models\Tache;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -15,9 +15,9 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProblemeResource extends Resource
+class TacheResource extends Resource
 {
-    protected static ?string $model = Probleme::class;
+    protected static ?string $model = Tache::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -26,18 +26,18 @@ class ProblemeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
-                ->required()
-                ->maxLength(150),
-                Forms\Components\Select::make("user_id") 
-                ->options(User::where("id","<>",auth()->id())->pluck("name","id")) 
-                ->searchable(),
-                Forms\Components\Select::make("material_id") 
-                ->options(Materiale::all()->pluck("libelle","id")) 
-                ->searchable()
-                ->required(),
+                    ->required()
+                    ->maxLength(150),
+                    Forms\Components\Select::make("user_id") 
+                    ->options(User::where("rolls","=","ROLL_TECH")->pluck("name","id")) 
+                    ->searchable()
+                    ->required(), 
+                    Forms\Components\Select::make("probleme_id") 
+                    ->options(Probleme::all()->pluck("title","id")) 
+                    ->searchable()
+                    ->required(), 
                 Forms\Components\TextInput::make('description')
-                    ->maxLength(150)
-                    ->required(),
+                    ->maxLength(150),
             ]);
     }
 
@@ -47,7 +47,7 @@ class ProblemeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\TextColumn::make('user_id'),
-                Tables\Columns\TextColumn::make('material_id'),
+                Tables\Columns\TextColumn::make('probleme_id'),
                 Tables\Columns\TextColumn::make('description'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
@@ -75,9 +75,9 @@ class ProblemeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProblemes::route('/'),
-            'create' => Pages\CreateProbleme::route('/create'),
-            'edit' => Pages\EditProbleme::route('/{record}/edit'),
+            'index' => Pages\ListTaches::route('/'),
+            'create' => Pages\CreateTache::route('/create'),
+            'edit' => Pages\EditTache::route('/{record}/edit'),
         ];
     }    
 }

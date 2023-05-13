@@ -10,13 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {/*
+    {
         Schema::create('taches', function (Blueprint $table) {
             $table->id();
-            $table->string("title")
-            $table->foreignId('user_id')->constrained();
+            $table->string("title");
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('probleme_id')->constrained('problemes');
+            $table->string("description")->nullable();
             $table->timestamps();
-        });*/
+        });
     }
 
     /**
